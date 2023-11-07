@@ -31,6 +31,6 @@ db.users.hasMany(db.miners,{as:"miners"});
 // one miner belonds to one user ..
 db.miners.belongsTo(db.users,{as:"owner",foreignKey:"userId"});
 
-//end
+//end.
 
 module.exports =db;
