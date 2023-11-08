@@ -39,6 +39,7 @@ const signup = async (req, res) => {
         user: JSON.stringify(user, null, 2),
         token,
       });
+      return res.status(201).json({token})
     } else {
       return res.status(412).json({ msg: "Precondition failed: user was not created" });
     }
