@@ -34,4 +34,17 @@ exports.userLoginValidator=(reqObj)=>{
     return false;
 }
 
+exports.minerValidator=(reqBody)=>{
+    if(!reqBody){
+        return false;
+    }
+    const {name,location,hashRate,active} =reqBody;
+    if(
+        typeof(name) ==='string'&& typeof(location) ==='string'&& 
+        typeof(hashRate) ==='number'&& typeof(active) ==='boolean'
+    ){
+        return true;
+    }
+    return false;
+}
 module.exports =exports;

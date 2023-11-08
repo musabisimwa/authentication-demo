@@ -28,8 +28,8 @@ db.miners= require("./minerModel")(sequelize,DataTypes);
 // relationships
 db.users.hasMany(db.miners,{as:"miners"});
 //
-// one miner belonds to one user ..
-db.miners.belongsTo(db.users,{as:"owner",foreignKey:"userId"});
+// one miner belonds to one user .. 
+db.miners.belongsTo(db.users,{foreignKey:"userId"});
 
 //end.
 

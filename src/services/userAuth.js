@@ -1,5 +1,9 @@
+// replace console.error /logs by dedicated logging modules
+
+
 const db = require('../models');
 const { userValidator } = require('../utils/validators');
+const jwt =require('jsonwebtoken');
 
 const User = db.users;
 
@@ -45,4 +49,36 @@ const saveUser = async (req, res, next) => {
   }
 };
 
-module.exports = { saveUser };
+
+/**
+ * middleware to verify if the user is authorized to perform an action
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const checkOwnership =(req,res,next) =>{
+// get the coookie named jwt that was created when login/signup action
+const token = req.cookies.jwt;
+
+if(!token){
+  // no token found ,un authorized acess
+  return res.status(401).json({msg:"unauthorized action"});
+}
+// decode the token to get the user
+jwt.verify(token,process.env.SECRET_KEY,
+  (err,decoded)=>{
+    if(err){
+      //error while decoding token
+      console.error(err);
+      return res.status(401).json({msg:"unauthorized action"});
+    }
+    //if success : user should be decripted
+    //send this to receivers that will use user verification before performing an action :next()
+    req.user =decoded;
+
+    
+});
+next();
+
+}
+module.exports = { saveUser ,checkOwnership};

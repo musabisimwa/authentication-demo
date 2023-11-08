@@ -8,6 +8,18 @@ module.exports=(sequelize,DataTypes) =>{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        location:{
+            type:DataTypes.STRING,
+            allowNull:false,
+        },
+        hashRate:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+        },
+        active:{
+            type:DataTypes.BOOLEAN,
+            allowNull:false,
+        },
         //more table attributes here
 
     },{timestamps:true});

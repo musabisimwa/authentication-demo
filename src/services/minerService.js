@@ -45,21 +45,44 @@ exports.getAMiner=async (id)=>{
  * @param {number}userId  creator's id
  * create a new miner 
  */
-exports.addMiner=(miner,userId)=>{
+exports.addMiner=async (miner,userId)=>{
+    try {
+        const newMiner ={
+            ...miner,
+            userId:userId.id
+        };
+
+       
+
+       const dbMiner= await Miners.create(newMiner);
+       return dbMiner?dbMiner.id:null;
+        
+    } catch (error) {
+        throw new Error(error);
+    }
 
 }
 /**
  * 
  * @param {number} id miner id 
+ * @param {number} userId :owner
+ * @param {Miner} miner :new miner update
  * @returns Miner : updated miner
  * requires authenticated user
  * can update a miner's details only if you own it
  */
-exports.updateMiner= async(id,userId)=>{
+exports.updateMiner= async(id,userId,miner)=>{
     try {
+      const updatedMiner = await Miners.update(miner,{
+        where:{
+            id,
+            userId:userId.id
+        }
+      })  ;
+      return updatedMiner;
         
     } catch (error) {
-        
+        throw new Error(error);
     }
 }
 
@@ -68,13 +91,38 @@ exports.updateMiner= async(id,userId)=>{
  * @param {number} id 
  * requires authenticated user
  * can  destrroy a miner only if you own it
+ * @returns true if deleted otherwise throw err
  */
 exports.deleteMiner=async(id,userId)=>{
 try {
-    
+    await Miners.destroy({
+        where:{
+            id,
+            userId:userId.id,
+        }
+    });
+    return true;
 } catch (error) {
+    throw new Error(error);
     
 }
+}
+
+/**
+ * 
+ * @returns All active miners
+ */
+exports.getActiveMiners=async()=>{
+    try {
+       const miners= await Miners.findAll({
+            where:{
+                active:true
+            }
+        });
+        return miners;
+    } catch (error) {
+        throw new Error(error); 
+    }
 }
 
 module.exports =exports

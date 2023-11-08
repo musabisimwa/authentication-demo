@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
+// add {alter:true} or {force:true} in sync() parameters to update/force update the db
 db.sequelize.sync().then(()=>{
     console.log("db is re syced");
 });
