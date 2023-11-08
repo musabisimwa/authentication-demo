@@ -3,6 +3,7 @@ const sequelize = require("sequelize");
 require("dotenv").config();
 const cookieParser =require("cookie-parser");
 const db = require("./models");
+
 const router = require('./routes');
 
 const PORT = process.env.PORT || 8000;

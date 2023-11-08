@@ -10,14 +10,21 @@ to create persistence when the container shutsdown
     $ docker volume create postgres_data 
 Replace #path to file storage to a valid absolute path to point to .../db/data found in the db folder in the project root path 
 You can also change the password if you wish
-    $ docker run --name postgres_container -e POSTGRES_PASSWORD=P@ssword1 -d -p 5432:5432 -v postgres_data: #path to file storage
+    $ docker run --name postgres_container -e POSTGRES_PASSWORD=password  -e POSTGRES_USER=postgres -d -p 5432:5432 -v postgres_data: <#path to file storage> postgres
+
+if you dont require persistence then after the pull command. run the following :
+    $ docker run --name postgres_container -e POSTGRES_PASSWORD=password -e POSTGRES_USER=postgres -d -p 5432:5432  postgres
+
+verify that the container is running with:
+    $ docker ps
+
 
 so we get
     host:localhost
     port:5432
     database:postgres 
     user:postgres
-    password: P@ssword1
+    password: password
 
 ## packages used 
     "bcrypt": "^5.1.1", - password hashing
