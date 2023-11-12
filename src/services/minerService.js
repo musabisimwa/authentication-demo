@@ -2,14 +2,17 @@ const db = require('../models/index')
 
 const Miners =db.miners;
 
-
+//ignoring the id,userId,timestamp attributes
+const attributes =['name','location','hashRate','active'];
 /**
  * get all miners
  * @returns {[]} Miner[] | []
  */
 exports.getAllMiners=async()=>{
 try {
-    const miners = await Miners.findAll();
+    const miners = await Miners.findAll({
+        attributes
+    });
     if(miners){
         return miners;
     }
@@ -28,8 +31,9 @@ try {
 exports.getAMiner=async (id)=>{
     try {
         const miner = await Miners.findOne({
+            attributes,
             where:{
-                id:id
+                id
             }
         });
        return miner?miner:null;
@@ -55,7 +59,8 @@ exports.addMiner=async (miner,userId)=>{
        
 
        const dbMiner= await Miners.create(newMiner);
-       return dbMiner?dbMiner.id:null;
+       const {name,location,hashRate,active}=dbMiner;
+       return dbMiner?{name,location,hashRate,active}:null;
         
     } catch (error) {
         throw new Error(error);
@@ -74,6 +79,7 @@ exports.addMiner=async (miner,userId)=>{
 exports.updateMiner= async(id,userId,miner)=>{
     try {
       const updatedMiner = await Miners.update(miner,{
+        attributes,
         where:{
             id,
             userId:userId.id
@@ -115,10 +121,12 @@ try {
 exports.getActiveMiners=async()=>{
     try {
        const miners= await Miners.findAll({
-            where:{
-                active:true
-            }
-        });
+        attributes,
+        where:{
+            active:true
+        }
+
+       });
         return miners;
     } catch (error) {
         throw new Error(error); 

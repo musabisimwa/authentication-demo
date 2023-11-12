@@ -10,6 +10,7 @@ router.post('/u/signup',saveUser,signup);
 
 router.post('/u/login',login);
 
+router.get('/miner/active',minerRoutes.getActive);
 router.put('/miner/:id',checkOwnership,minerRoutes.update);
 router.get('/miner/:id',minerRoutes.getOne);
 router.get('/miner',minerRoutes.getAll);

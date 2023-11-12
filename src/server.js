@@ -3,7 +3,7 @@ const sequelize = require("sequelize");
 require("dotenv").config();
 const cookieParser =require("cookie-parser");
 const db = require("./models");
-
+const cors =require('cors');
 const router = require('./routes');
 
 const PORT = process.env.PORT || 8000;
@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 8000;
 const app =express();
 
 //conf middlewares
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());

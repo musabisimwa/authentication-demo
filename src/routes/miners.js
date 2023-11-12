@@ -3,6 +3,7 @@ const {
   getAMiner,
   getAllMiners,
   deleteMiner,
+  getActiveMiners,
   addMiner,
 } = require("../services/minerService");
 const { newMinerFromUpdates } = require("../utils/minerUtils");
@@ -15,6 +16,21 @@ const { minerValidator } = require("../utils/validators");
  */
 const getAll = (req, res) => {
   getAllMiners()
+    .then((miners) => {
+      if (Array.isArray(miners)) {
+        return res.status(200).json(miners);
+      }
+      // return an empty array if no miners
+      return res.status(200).json([]);
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({ msg: "internal server error" });
+    });
+};
+
+const getActive = (req, res) => {
+  getActiveMiners()
     .then((miners) => {
       if (Array.isArray(miners)) {
         return res.status(200).json(miners);
@@ -90,7 +106,8 @@ const update = async (req, res) => {
           const updatedMiner = await updateMiner(paramId, user, newMiner);
   
           if (updatedMiner) {
-            return res.status(200).json({});
+            
+            return res.status(200).json({updateMiner});
           } else {
             return res.status(500).json({ msg: "Internal server error" });
           }
@@ -120,7 +137,7 @@ const deleteAMiner = (req, res) => {
   deleteMiner(paramId)
     .then((action) => {
       if (action) {
-        return res.status(200).json({});
+        return res.status(204).json({id:paramId});
       }
     })
     .catch((error) => {
@@ -145,10 +162,9 @@ const post = (req, res) => {
   }
 
   addMiner(miner, user)
-    .then((id) => {
-      if (id) {
-        console.log(id);
-        return res.status(201).json({ id: id });
+    .then((minerObj) => {
+      if (minerObj) {
+        return res.status(201).json({ minerObj});
       } else {
         return res.status(401).json({ msg: "unathorized" });
       }
@@ -159,4 +175,4 @@ const post = (req, res) => {
     });
 };
 
-module.exports = { getAll, update, getOne, deleteAMiner, post };
+module.exports = { getAll, update, getOne, deleteAMiner, post,getActive };

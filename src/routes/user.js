@@ -89,7 +89,7 @@ const login = async (req, res) => {
       token: token,
     });
 
-    return res.status(200).send({msg:"logged in as " + user.email});
+    return res.status(200).json({token});
   } catch (err) {
     console.error(err);
     const errMsg = err.message || "An internal server error occurred";
